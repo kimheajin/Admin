@@ -1,6 +1,7 @@
 package com.example.demo.model.network.response;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.example.demo.model.enumclass.UserStatus;
 
@@ -30,5 +31,7 @@ public class UserApiResponse {
 	private LocalDateTime registeredAt;
 	
 	private LocalDateTime unregisteredAt;
+	
+	private List<OrderGroupApiResponse> orderGroupApiResponseList;
 	
 }
