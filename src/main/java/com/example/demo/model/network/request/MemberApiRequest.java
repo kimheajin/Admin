@@ -2,7 +2,7 @@ package com.example.demo.model.network.request;
 
 import java.time.LocalDateTime;
 
-import com.example.demo.model.enumclass.UserStatus;
+import com.example.demo.model.enumclass.MemberStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserApiRequest {
+public class MemberApiRequest {
 
 	private Long id;
 	
@@ -21,7 +21,7 @@ public class UserApiRequest {
 	
 	private String password;
 	
-	private UserStatus status;
+	private MemberStatus status;
 	
 	private String email;
 	

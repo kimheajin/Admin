@@ -80,7 +80,7 @@ public class OrderGroup {
 	
 	// OrderGroup N : 1 User
 	@ManyToOne
-	private User user;
+	private Member user;
 	
 	// OrderGroup 1 : N OrderDetail
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "orderGroup")

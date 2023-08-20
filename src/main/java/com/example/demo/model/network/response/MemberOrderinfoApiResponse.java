@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-public class UserOrderinfoApiResponse {
+public class MemberOrderinfoApiResponse {
 
-	private UserApiResponse userApiResponse;
+	private MemberApiResponse memberApiResponse;
 }

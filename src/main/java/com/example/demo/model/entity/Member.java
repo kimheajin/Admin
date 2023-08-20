@@ -21,7 +21,7 @@ import org.springframework.data.annotation.LastModifiedBy;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import com.example.demo.model.enumclass.UserStatus;
+import com.example.demo.model.enumclass.MemberStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,7 +38,7 @@ import lombok.experimental.Accessors;
 @Entity
 @ToString(exclude = {"orderGroupList"})
 @EntityListeners(AuditingEntityListener.class) // 좌측의 감시자 리스너 사용 설정 
-public class User {
+public class Member {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +49,7 @@ public class User {
 	private String password;
 	
 	@Enumerated(EnumType.STRING)
-	private UserStatus status;
+	private MemberStatus status;
 	
 	private String email;
 	

@@ -1,9 +1,9 @@
 package com.example.demo.sample;
 
 import com.example.demo.AdminApplicationTests;
-import com.example.demo.model.entity.User;
-import com.example.demo.model.enumclass.UserStatus;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.model.entity.Member;
+import com.example.demo.model.enumclass.MemberStatus;
+import com.example.demo.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class UserSample extends AdminApplicationTests {
     private Random random;
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository userRepository;
 
     @Test
     public void sampleCreate(){
@@ -27,16 +27,16 @@ public class UserSample extends AdminApplicationTests {
         for(int i = 1 ; i < 1001; i++){
             // 가입 상태 랜덤
             int div = (random.nextInt(10)+1) % 2;
-            UserStatus status = (div == 0 ? UserStatus.REGISTERED : UserStatus.UNREGISTERED);
+            MemberStatus status = (div == 0 ? MemberStatus.REGISTERED : MemberStatus.UNREGISTERED);
 
-            User user = User.builder()
+            Member user = Member.builder()
                     .account("TestUser"+i)
                     .password("password"+i)
                     .status(status)
                     .email("TestUser"+i+"@gmail.com")
                     .phoneNumber("010-1111-"+String.format("%04d", i))
                     .registeredAt(getRandomDate())
-                    .unregisteredAt(status.equals(UserStatus.UNREGISTERED) ? getRandomDate() : null )
+                    .unregisteredAt(status.equals(MemberStatus.UNREGISTERED) ? getRandomDate() : null )
                     .build();
 
             log.info("{}",user);

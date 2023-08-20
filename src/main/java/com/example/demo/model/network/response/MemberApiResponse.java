@@ -3,7 +3,7 @@ package com.example.demo.model.network.response;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.example.demo.model.enumclass.UserStatus;
+import com.example.demo.model.enumclass.MemberStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserApiResponse {
+public class MemberApiResponse {
 
 	private Long id;
 	
@@ -22,7 +22,7 @@ public class UserApiResponse {
 	
 	private String password;
 	
-	private UserStatus status;
+	private MemberStatus status;
 	
 	private String email;
 	

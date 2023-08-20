@@ -11,13 +11,13 @@ import com.example.demo.model.network.Header;
 import com.example.demo.model.network.request.OrderGroupApiRequest;
 import com.example.demo.model.network.response.OrderGroupApiResponse;
 import com.example.demo.repository.OrderGroupRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.MemberRepository;
 
 @Service
 public class OrderGroupApiLogicService extends BaseService<OrderGroupApiRequest, OrderGroupApiResponse, OrderGroup>{
 
 	@Autowired
-	private UserRepository userRepository;
+	private MemberRepository userRepository;
 	
 	@Override
 	public Header<OrderGroupApiResponse> create(Header<OrderGroupApiRequest> request) {

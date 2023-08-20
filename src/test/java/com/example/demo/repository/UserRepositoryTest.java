@@ -16,26 +16,26 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.example.demo.AdminApplicationTests;
 import com.example.demo.model.entity.Item;
 import com.example.demo.model.entity.OrderDetail;
-import com.example.demo.model.entity.User;
-import com.example.demo.model.enumclass.UserStatus;
+import com.example.demo.model.entity.Member;
+import com.example.demo.model.enumclass.MemberStatus;
 
 public class UserRepositoryTest extends AdminApplicationTests{
 	
 	@Autowired  
-	private UserRepository userRepository;
+	private MemberRepository userRepository;
 	
 	@Test
 	public void create() {
 		String account = "Test03";
 		String password = "Test03";
-		UserStatus status = UserStatus.REGISTERED;
+		MemberStatus status = MemberStatus.REGISTERED;
 		String email = "Test03@gmail.com";
 		String phoneNumber = "010-0000-3333";
 		LocalDateTime registeredAt = LocalDateTime.now();
 //		LocalDateTime createdAt = LocalDateTime.now();
 //		String createdBy = "AdminServer";
 		
-		User user = new User();
+		Member user = new Member();
 		
 		user.setAccount(account);
 		user.setPassword(password);
@@ -45,14 +45,14 @@ public class UserRepositoryTest extends AdminApplicationTests{
 		user.setRegisteredAt(registeredAt);
 		
 		// builder를 이용하면 재정의하려는 클래스에 생성자를 추가하지 않고 점 연산자를 이용해 생성자를 생성할 수 있다.
-		User u = User.builder()
+		Member u = Member.builder()
 				.account(account)
 				.password(password)
 				.status(status)
 				.email(email)
 				.build();
 		
-		User newUser = userRepository.save(user);
+		Member newUser = userRepository.save(user);
 		
 		assertNotNull(newUser);
 	}
@@ -61,12 +61,12 @@ public class UserRepositoryTest extends AdminApplicationTests{
 	@Transactional
 	public void read() {
 		// optional은 말그대로 옵션을 사용하기 위한 것.
-		User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-0000-1111");
+		Member user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-0000-1111");
 		
 		// Accessors(chain=true)를 이용하면 아래와 같이 여러개의 set을 한줄에 넣을 수 있다.
 		user.setAccount(null).setEmail(null).setPhoneNumber(null);
 		// 이것은 굳이 생성자를 만들지 않아도 3개의 값을 가지는 객체를 만들어낼 수도 있다. 
-		User u = new User().setAccount("").setEmail("").setPassword("");
+		Member u = new Member().setAccount("").setEmail("").setPassword("");
 		
 		
 		user.getOrderGroupList().stream().forEach(orderGroup -> {
@@ -105,7 +105,7 @@ public class UserRepositoryTest extends AdminApplicationTests{
 	
 	@Test
 	public void update() {
-		Optional<User> user = userRepository.findById(2L);
+		Optional<Member> user = userRepository.findById(2L);
 		
 		// 위의 findById에서 이미 id값을 찾았기 때문에 아래는 해당 id값을 기준으로 변경을 해준다.
 		user.ifPresent(selectUser ->{
@@ -120,7 +120,7 @@ public class UserRepositoryTest extends AdminApplicationTests{
 	@Test
 	// @Transactional //이 어노테이션은 아래의 SQL기능이 실행되어도 다시 롤백시켜주는 역할을 한다.
 	public void delete() {
-		Optional<User> user = userRepository.findById(3L);
+		Optional<Member> user = userRepository.findById(3L);
 		
 		// assertTrue는 값이 True인지 False인지를 확인해주는 메소드
 		assertTrue(user.isPresent());
@@ -131,7 +131,7 @@ public class UserRepositoryTest extends AdminApplicationTests{
 		});
 		
 		// 다시 한 번 user가 값이 있는지 확인하기 위한 코드
-		Optional<User> deleteUser = userRepository.findById(3L);
+		Optional<Member> deleteUser = userRepository.findById(3L);
 		
 		// 만약 deleteUser의 값이 있다면 코드 실행
 		if(deleteUser.isPresent()) {

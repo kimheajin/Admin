@@ -11,18 +11,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.model.entity.OrderGroup;
-import com.example.demo.model.entity.User;
-import com.example.demo.model.enumclass.UserStatus;
+import com.example.demo.model.entity.Member;
+import com.example.demo.model.enumclass.MemberStatus;
 import com.example.demo.model.network.Header;
 import com.example.demo.model.network.Pagination;
-import com.example.demo.model.network.request.UserApiRequest;
+import com.example.demo.model.network.request.MemberApiRequest;
 import com.example.demo.model.network.response.ItemApiResponse;
 import com.example.demo.model.network.response.OrderGroupApiResponse;
-import com.example.demo.model.network.response.UserApiResponse;
-import com.example.demo.model.network.response.UserOrderinfoApiResponse;
+import com.example.demo.model.network.response.MemberApiResponse;
+import com.example.demo.model.network.response.MemberOrderinfoApiResponse;
 
 @Service
-public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResponse, User>{
+public class UserApiLogicService extends BaseService<MemberApiRequest, MemberApiResponse, Member>{
 
 	@Autowired
 	private OrderGroupApiLogicService orderGroupApiLogicService;
@@ -34,66 +34,66 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
 	// 2. user 생성
 	// 3. 생성된 데이터를 기준으로 UserApiResponse를 return
 	@Override
-	public Header<UserApiResponse> create(Header<UserApiRequest> request) {
+	public Header<MemberApiResponse> create(Header<MemberApiRequest> request) {
 		
 		// 1.
-		UserApiRequest userApiRequest = request.getData();
+		MemberApiRequest memberApiRequest = request.getData();
 		
 		
 		// 2.
-		User user = User.builder()
-				.account(userApiRequest.getAccount())
-				.password(userApiRequest.getPassword())
-				.status(UserStatus.REGISTERED)
-				.phoneNumber(userApiRequest.getPhoneNumber())
-				.email(userApiRequest.getEmail())
+		Member user = Member.builder()
+				.account(memberApiRequest.getAccount())
+				.password(memberApiRequest.getPassword())
+				.status(MemberStatus.REGISTERED)
+				.phoneNumber(memberApiRequest.getPhoneNumber())
+				.email(memberApiRequest.getEmail())
 				.registeredAt(LocalDateTime.now())
 				.build();
 		
-		User newUser = baseRepository.save(user);
+		Member newMember = baseRepository.save(user);
 		
 		// 3.
 		
-		return Header.OK(response(newUser));
+		return Header.OK(response(newMember));
 	}
 
 	@Override
-	public Header<UserApiResponse> read(Long id) {
+	public Header<MemberApiResponse> read(Long id) {
 		// id -> repository getOne, getById
-		Optional<User> optional = baseRepository.findById(id);
+		Optional<Member> optional = baseRepository.findById(id);
 		
 		// user -> userApiResponse return
-		return optional.map(user -> response(user))
+		return optional.map(member -> response(member))
 						.map(userApiResponse -> Header.OK(userApiResponse))
 						.orElseGet(()->Header.ERROR("데이터 없음"));
 		// orElseGet은 취득한 데이터가 없는 경우 사용한다. 
 	}
 
 	@Override
-	public Header<UserApiResponse> update(Header<UserApiRequest> request) {
+	public Header<MemberApiResponse> update(Header<MemberApiRequest> request) {
 		
 		// 1. data
-		UserApiRequest userApiRequest = request.getData();
+		MemberApiRequest memberApiRequest = request.getData();
 		
-		// 2. id -> user 데이터 찾음
-		Optional<User> optional1 = baseRepository.findById(userApiRequest.getId());
+		// 2. id -> member 데이터 찾음
+		Optional<Member> optional1 = baseRepository.findById(memberApiRequest.getId());
 		
-		return optional1.map(user -> {
+		return optional1.map(member -> {
 			// 3. data->update
 			// id에 대한 업데이트 발생
-			user.setAccount(userApiRequest.getAccount())
-							.setPassword(userApiRequest.getPassword())
-							.setStatus(userApiRequest.getStatus())
-							.setPhoneNumber(userApiRequest.getPhoneNumber())
-							.setEmail(userApiRequest.getEmail())
-							.setRegisteredAt(userApiRequest.getRegisteredAt())
-							.setUnregisteredAt(userApiRequest.getUnregisteredAt());
+			member.setAccount(memberApiRequest.getAccount())
+							.setPassword(memberApiRequest.getPassword())
+							.setStatus(memberApiRequest.getStatus())
+							.setPhoneNumber(memberApiRequest.getPhoneNumber())
+							.setEmail(memberApiRequest.getEmail())
+							.setRegisteredAt(memberApiRequest.getRegisteredAt())
+							.setUnregisteredAt(memberApiRequest.getUnregisteredAt());
 		
-			return user;
+			return member;
 		})
-				// 4. userApiResponse
-		.map(user->baseRepository.save(user)) // update -> newUser 새로운 유저 객체 반환.
-		.map(updateUser->response(updateUser)) // response를 통해 userApiResponse로 리턴하게 된다.
+				// 4. memberApiResponse
+		.map(member->baseRepository.save(member)) // update -> newmember 새로운 유저 객체 반환.
+		.map(updateMember->response(updateMember)) // response를 통해 userApiResponse로 리턴하게 된다.
 		.map(userApiResponse -> Header.OK(userApiResponse))
 		// .map(Header::OK)
 		.orElseGet(()->Header.ERROR("데이터 없음"));
@@ -102,68 +102,68 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
 
 	@Override
 	public Header delete(Long id) {
-		// 1. id -> repository -> user 취득
-		Optional<User> optional = baseRepository.findById(id);
+		// 1. id -> repository -> member 취득
+		Optional<Member> optional = baseRepository.findById(id);
 		
 		// 2. repository -> delete 삭제 실행
 		// response return
-		return optional.map(user ->{
-			baseRepository.delete(user);
+		return optional.map(member ->{
+			baseRepository.delete(member);
 			return Header.OK();
 		})
 		.orElseGet(()->Header.ERROR("데이터 없음"));
 	}
 	
-	private UserApiResponse response(User user){
-		// user -> userApiResponse
+	private MemberApiResponse response(Member member){
+		// member -> memberApiResponse
 		
-		UserApiResponse userApiResponse = UserApiResponse.builder()
-				.id(user.getId())
-				.account(user.getAccount())
-				.password(user.getPassword())
-				.email(user.getEmail())
-				.phoneNumber(user.getPhoneNumber())
-				.status(user.getStatus())
-				.registeredAt(user.getRegisteredAt())
-				.unregisteredAt(user.getUnregisteredAt())
+		MemberApiResponse memberApiResponse = MemberApiResponse.builder()
+				.id(member.getId())
+				.account(member.getAccount())
+				.password(member.getPassword())
+				.email(member.getEmail())
+				.phoneNumber(member.getPhoneNumber())
+				.status(member.getStatus())
+				.registeredAt(member.getRegisteredAt())
+				.unregisteredAt(member.getUnregisteredAt())
 				.build();
 		
 		//Header + data return
 		
-		return userApiResponse;
+		return memberApiResponse;
 	}
 	
-	public Header<List<UserApiResponse>> search(Pageable pageable){
+	public Header<List<MemberApiResponse>> search(Pageable pageable){
 		// pageable에 해당되는 유저들을 page라는것을 통해 
-		// 유저를 하나씩 뽑아 response(user)로 하여금 리스트로 변환시켜 Header에 적용
-		Page<User> users = baseRepository.findAll(pageable);
+		// 유저를 하나씩 뽑아 response(member)로 하여금 리스트로 변환시켜 Header에 적용
+		Page<Member> members = baseRepository.findAll(pageable);
 		
-		List<UserApiResponse> userApiResponseList = users.stream()
-													.map(user -> response(user))
+		List<MemberApiResponse> memberApiResponseList = members.stream()
+													.map(member -> response(member))
 													.collect(Collectors.toList());
 		
 		Pagination pagination = Pagination.builder()
-										.totalPages(users.getTotalPages())
-										.totalElements(users.getTotalElements())
-										.currentPage(users.getNumber())
-										.currentElements(users.getNumberOfElements())
+										.totalPages(members.getTotalPages())
+										.totalElements(members.getTotalElements())
+										.currentPage(members.getNumber())
+										.currentElements(members.getNumberOfElements())
 										.build();
 		
-		return Header.OK(userApiResponseList, pagination);
+		return Header.OK(memberApiResponseList, pagination);
 	}
 	
-	public Header<UserOrderinfoApiResponse> orderInfo(Long id){
+	public Header<MemberOrderinfoApiResponse> orderInfo(Long id){
 		
 		// 필요정보
-		// user
-		User user = baseRepository.getById(id);
+		// member
+		Member member = baseRepository.getById(id);
 		
-		UserApiResponse userApiResponse = response(user);
+		MemberApiResponse memberApiResponse = response(member);
 		
-		userApiResponse.setOrderGroupApiResponseList(null);
+		memberApiResponse.setOrderGroupApiResponseList(null);
 		
 		// orderGroup
-		List<OrderGroup> orderGroupList = user.getOrderGroupList();
+		List<OrderGroup> orderGroupList = member.getOrderGroupList();
 		
 		List<OrderGroupApiResponse> orderGroupApiResponseList = orderGroupList.stream()
 				.map(orderGroup -> {
@@ -179,13 +179,13 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
 				 })
 				  .collect(Collectors.toList());
 		
-		userApiResponse.setOrderGroupApiResponseList(orderGroupApiResponseList);
+		memberApiResponse.setOrderGroupApiResponseList(orderGroupApiResponseList);
 		
-		UserOrderinfoApiResponse userOrderInfoApiResponse = UserOrderinfoApiResponse.builder()
-				.userApiResponse(userApiResponse)
+		MemberOrderinfoApiResponse memberOrderInfoApiResponse = MemberOrderinfoApiResponse.builder()
+				.memberApiResponse(memberApiResponse)
 				.build();
 		
-		return Header.OK(userOrderInfoApiResponse);
+		return Header.OK(memberOrderInfoApiResponse);
 	}
 
 }

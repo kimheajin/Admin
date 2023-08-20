@@ -4,12 +4,12 @@ import com.example.demo.AdminApplicationTests;
 import com.example.demo.model.entity.Item;
 import com.example.demo.model.entity.OrderDetail;
 import com.example.demo.model.entity.OrderGroup;
-import com.example.demo.model.entity.User;
+import com.example.demo.model.entity.Member;
 import com.example.demo.model.enumclass.OrderType;
 import com.example.demo.repository.ItemRepository;
 import com.example.demo.repository.OrderDetailRepository;
 import com.example.demo.repository.OrderGroupRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.MemberRepository;
 import lombok.extern.slf4j.Slf4j;
 
 import org.junit.jupiter.api.Test;
@@ -27,7 +27,7 @@ public class OrderDetailSample extends AdminApplicationTests {
     private Random random = new Random();
 
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository userRepository;
 
     @Autowired
     private ItemRepository itemRepository;
@@ -41,10 +41,10 @@ public class OrderDetailSample extends AdminApplicationTests {
     @Test
     public void createOrder(){
 
-        List<User> userList = userRepository.findAll();
+        List<Member> userList = userRepository.findAll();
 
         for(int j = 0; j < 1; j++){
-            User user = userList.get(j);
+            Member user = userList.get(j);
             item(user);
 
         }
@@ -62,7 +62,7 @@ public class OrderDetailSample extends AdminApplicationTests {
     }
 
 
-    private void item(User user){
+    private void item(Member user){
         double totalAmount = 0;
 
         List<Item> items = new ArrayList<>();
